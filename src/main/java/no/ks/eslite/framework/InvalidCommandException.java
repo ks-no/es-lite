@@ -1,0 +1,7 @@
+package no.ks.eslite.framework;
+
+public class InvalidCommandException extends RuntimeException {
+    public InvalidCommandException(String message) {
+
+    }
+}
