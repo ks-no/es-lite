@@ -14,7 +14,6 @@ public class EventsourcingConfiguration {
     }
 
     @Bean
-    @SuppressWarnings("unchecked")
     public EventDeserializer eventDeserializer(Set<Event> events){
         return new JacksonEventDeserializer(events.stream().map(Event::getClass).collect(Collectors.toSet()));
     }
