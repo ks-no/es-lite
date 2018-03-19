@@ -19,7 +19,7 @@ public class JacksonEventDeserializer implements EventDeserializer {
 
     public JacksonEventDeserializer(Set<Class<? extends Event>> events) {
         this.events = HashSet.ofAll(events)
-                .toMap(API.unchecked(p -> Tuple.of(p.getClass().getAnnotation(EventType.class).value(), p)));
+                .toMap(API.unchecked(p -> Tuple.of(p.getAnnotation(EventType.class).value(), p)));
     }
 
     @Override
