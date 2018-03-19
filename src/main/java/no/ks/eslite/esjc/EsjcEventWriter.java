@@ -22,8 +22,8 @@ public class EsjcEventWriter implements EventWriter {
     }
 
     @Override
-    public void write(List<Event> events) {
-        events.groupBy(Event::getAggregateId).forEach((aggId, aggEvents) -> eventStore.appendToStream(
+    public void write(java.util.List<Event> events) {
+        List.ofAll(events).groupBy(Event::getAggregateId).forEach((aggId, aggEvents) -> eventStore.appendToStream(
                 streamIdGenerator.generateStreamId(aggEvents.distinctBy(Event::getAggregateType).single().getAggregateType(), aggId),
                 ExpectedVersion.ANY,
                 aggEvents.map(aggEvent -> EventData.newBuilder()

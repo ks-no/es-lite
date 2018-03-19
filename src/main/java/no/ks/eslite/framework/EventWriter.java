@@ -1,6 +1,7 @@
 package no.ks.eslite.framework;
 
-import io.vavr.collection.List;
+
+import java.util.List;
 
 public interface EventWriter {
 
