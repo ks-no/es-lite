@@ -15,14 +15,15 @@ public class EventsourcingConfiguration {
 
     @Bean
     @SuppressWarnings("unchecked")
-    public EventDeserializer eventDeserializer(){
-        return new JacksonEventDeserializer((Set<Class<? extends Event>>) List.ofAll(new Reflections("no.ks.fiks.autorisasjon").getSubTypesOf(Event.class))
-                .filter(p -> p.isAnnotationPresent(EventType.class)));
+    public EventDeserializer eventDeserializer(Set<Event> events){
+        return new JacksonEventDeserializer(events.stream().map(Event::getClass).collect(Collectors.toSet()));
     }
 
     @Bean
     public CmdHandler cmdHandler(EventStore eventStore, EventDeserializer deserializer){
-        return new CmdHandler(new EsjcEventWriter(eventStore), new EsjcAggregateReader(eventStore, deserializer));
+        return new CmdHandler(
+                new EsjcEventWriter(eventStore, (aggregateType, aggregateId) -> String.format("authorization_%s_%s", aggregateType, aggregateId)),
+                new EsjcAggregateReader(eventStore, deserializer));
     }
 
     @Bean
