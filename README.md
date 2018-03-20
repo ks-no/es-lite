@@ -7,7 +7,7 @@ public class EventsourcingConfiguration {
     public EventStore eventStore(EvenStoreProperties conf) {
         return EventStoreBuilder.newBuilder()
                 .clusterNodeUsingGossipSeeds(cluster -> cluster
-                        .gossipSeedEndpoints(conf.getHosts().stream().map(p -> new InetSocketAddress(p, 2113)).collect(Collectors.toList())))
+                        .gossipSeedEndpoints(conf.getHosts().stream().map(p -> new InetSocketAddress(p, 1113)).collect(Collectors.toList())))
                 .useSslConnection()
                 .userCredentials(conf.getUser(), conf.getPassword())
                 .build();
@@ -20,9 +20,11 @@ public class EventsourcingConfiguration {
 
     @Bean
     public CmdHandler cmdHandler(EventStore eventStore, EventDeserializer deserializer){
+        EsjcStreamIdGenerator streamIdGenerator = (aggregateType, aggregateId) -> String.format("authorization_%s_%s", aggregateType, aggregateId);
+
         return new CmdHandler(
-                new EsjcEventWriter(eventStore, (aggregateType, aggregateId) -> String.format("authorization_%s_%s", aggregateType, aggregateId)),
-                new EsjcAggregateReader(eventStore, deserializer));
+                new EsjcEventWriter(eventStore, streamIdGenerator),
+                new EsjcAggregateReader(eventStore, deserializer, streamIdGenerator));
     }
 
     @Bean
@@ -31,4 +33,5 @@ public class EventsourcingConfiguration {
     }
 
 }
+
 ```
