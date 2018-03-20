@@ -16,6 +16,8 @@ public abstract class Aggregate<AGGREGATE extends Aggregate, EVENT_TYPE extends 
         applicators = applicators.put(eventClass, (BiFunction<Aggregate, Event, Aggregate>) applicatorFunction);
     }
 
+    public abstract String getAggregateType();
+
     public Aggregate apply(Aggregate aggregate, Event event){
         return applicators
                 .get(event.getClass())

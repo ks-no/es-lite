@@ -4,5 +4,4 @@ import java.util.UUID;
 
 public interface Event {
     UUID getAggregateId();
-    String getAggregateType();
 }

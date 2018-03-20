@@ -20,9 +20,9 @@ public class EsjcAggregateReader implements AggregateReader {
     }
 
     @Override
-    public Aggregate read(String aggregateType, UUID aggregateId, Aggregate aggregate) {
+    public Aggregate read(UUID aggregateId, Aggregate aggregate) {
         try {
-            eventStore.streamEventsForward(this.esjcStreamIdGenerator.generateStreamId(aggregateType, aggregateId), 0, 100, true)
+            eventStore.streamEventsForward(this.esjcStreamIdGenerator.generateStreamId(aggregate.getAggregateType(), aggregateId), 0, 100, true)
                     .map(p -> deserializer.deserialize(p.event.data, p.event.eventType))
                     .forEach(e -> aggregate.apply(aggregate, e));
         } catch(IllegalStateException e){
