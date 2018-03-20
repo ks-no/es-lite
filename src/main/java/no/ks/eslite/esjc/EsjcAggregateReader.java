@@ -12,15 +12,18 @@ public class EsjcAggregateReader implements AggregateReader {
 
     private final EventStore eventStore;
     private EventDeserializer deserializer;
+    private EsjcStreamIdGenerator esjcStreamIdGenerator;
 
-    public EsjcAggregateReader(EventStore eventStore, EventDeserializer deserializer) {
+    public EsjcAggregateReader(EventStore eventStore, EventDeserializer deserializer, EsjcStreamIdGenerator esjcStreamIdGenerator) {
         this.eventStore = eventStore;
         this.deserializer = deserializer;
+        this.esjcStreamIdGenerator = esjcStreamIdGenerator;
     }
 
     @Override
-    public List<Event> read(String aggregateType, UUID aggregateId, EsjcStreamIdGenerator esjcStreamIdGenerator) {
-        return List.ofAll(eventStore.streamEventsForward(esjcStreamIdGenerator.generateStreamId(aggregateType, aggregateId), 0, 100, true)
+    public List<Event> read(String aggregateType, UUID aggregateId) {
+
+        return List.ofAll(eventStore.streamEventsForward(this.esjcStreamIdGenerator.generateStreamId(aggregateType, aggregateId), 0, 100, true)
                 .map(p -> deserializer.deserialize(p.event.data, p.event.eventType)));
     }
 }

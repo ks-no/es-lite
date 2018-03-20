@@ -6,5 +6,5 @@ import no.ks.eslite.esjc.EsjcStreamIdGenerator;
 import java.util.UUID;
 
 public interface AggregateReader {
-    List<Event> read(String aggregateType, UUID aggregateId, EsjcStreamIdGenerator esjcStreamIdGenerator);
+    List<Event> read(String aggregateType, UUID aggregateId);
 }
