@@ -3,10 +3,10 @@ package no.ks.eslite.esjc;
 import com.github.msemys.esjc.CatchUpSubscription;
 import com.github.msemys.esjc.CatchUpSubscriptionListener;
 import com.github.msemys.esjc.ResolvedEvent;
-import no.ks.eslite.framework.EventDeserializer;
-import no.ks.eslite.framework.Projection;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.Set;
+import no.ks.eslite.framework.EventDeserializer;
+import no.ks.eslite.framework.Projection;
 
 public class EsjcEventListener implements CatchUpSubscriptionListener{
 
