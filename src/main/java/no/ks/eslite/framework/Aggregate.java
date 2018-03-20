@@ -1,9 +1,9 @@
 package no.ks.eslite.framework;
 
 import io.vavr.collection.HashMap;
-import io.vavr.collection.List;
 import io.vavr.collection.Map;
 
+import java.util.List;
 import java.util.function.BiFunction;
 
 import static java.lang.String.format;
@@ -20,8 +20,8 @@ public abstract class Aggregate<T extends AggregateState, EVENT_TYPE extends Eve
     }
 
     @SuppressWarnings("unchecked")
-    protected <C extends CMD_TYPE> void onCmd(Class<C> cmdClass, BiFunction<T, C, List<Event>> handlerFunction){
-        handlers = handlers.put(cmdClass, (BiFunction<T, Command, List<Event>>) handlerFunction);
+    protected <C extends CMD_TYPE> void onCmd(Class<C> cmdClass, BiFunction<T, C, java.util.List<Event>> handlerFunction){
+        handlers = handlers.put(cmdClass, (BiFunction<T, Command, java.util.List<Event>>) handlerFunction);
     }
 
     public abstract T initState();
@@ -37,6 +37,6 @@ public abstract class Aggregate<T extends AggregateState, EVENT_TYPE extends Eve
         return handlers
                 .get(cmd.getClass())
                 .getOrElseThrow(() -> new RuntimeException(format("No handler found for event %s", cmd.getClass().getSimpleName())))
-                .apply(state, cmd).toJavaList();
+                .apply(state, cmd);
     }
 }
