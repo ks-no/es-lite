@@ -10,6 +10,7 @@ import static java.lang.String.format;
 public abstract class Aggregate<AGGREGATE extends Aggregate, EVENT_TYPE extends Event> {
 
     private Map<Class<? extends Event>, BiFunction<Aggregate, Event, Aggregate>> applicators = HashMap.empty();
+    private long currentEventNumber;
 
     @SuppressWarnings("unchecked")
     protected <E extends EVENT_TYPE> void onEvent(Class<E> eventClass, BiFunction<AGGREGATE, E, AGGREGATE> applicatorFunction){
@@ -18,11 +19,23 @@ public abstract class Aggregate<AGGREGATE extends Aggregate, EVENT_TYPE extends 
 
     public abstract String getAggregateType();
 
-    public Aggregate apply(Aggregate aggregate, Event event){
+    public long getCurrentEventNumber(){
+        return currentEventNumber;
+    }
+
+    @SuppressWarnings("unchecked")
+    public AGGREGATE withCurrentEventNumber(long currentEventNumber){
+        this.currentEventNumber = currentEventNumber;
+        return (AGGREGATE) this;
+    };
+
+    public Aggregate apply(Aggregate aggregate, Event event, long eventNumber){
+        this.currentEventNumber = eventNumber;
         return applicators
                 .get(event.getClass())
                 .getOrElseThrow(() -> new RuntimeException(format("No applicator found for event %s", event.getClass().getSimpleName())))
-                .apply(aggregate, event);
+                .apply(aggregate, event)
+                .withCurrentEventNumber(currentEventNumber);
     }
 
 }

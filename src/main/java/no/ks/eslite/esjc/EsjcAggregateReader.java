@@ -23,11 +23,10 @@ public class EsjcAggregateReader implements AggregateReader {
     public Aggregate read(UUID aggregateId, Aggregate aggregate) {
         try {
             eventStore.streamEventsForward(this.esjcStreamIdGenerator.generateStreamId(aggregate.getAggregateType(), aggregateId), 0, 100, true)
-                    .map(p -> deserializer.deserialize(p.event.data, p.event.eventType))
-                    .forEach(e -> aggregate.apply(aggregate, e));
+                    .forEach(p -> aggregate.apply(aggregate, deserializer.deserialize(p.event.data, p.event.eventType), p.event.eventNumber));
         } catch(IllegalStateException e){
             if("Unexpected read status: StreamNotFound".equals(e.getMessage())){
-                return aggregate;
+                return aggregate.withCurrentEventNumber(-1);
             }
             throw e;
         }
