@@ -12,8 +12,6 @@ public abstract class Aggregate<T extends AggregateState, EVENT_TYPE extends Eve
 
     private Map<Class<? extends Event>, BiFunction<T, Event, T>> applicators = HashMap.empty();
 
-    private Map<Class<? extends Command>, BiFunction<T, Command, List<Event>>> handlers = HashMap.empty();
-
     @SuppressWarnings("unchecked")
     protected <E extends EVENT_TYPE> void onEvent(Class<E> eventClass, BiFunction<T, E, T> applicatorFunction){
         applicators = applicators.put(eventClass, (BiFunction<T, Event, T>) applicatorFunction);
