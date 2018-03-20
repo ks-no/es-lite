@@ -33,10 +33,10 @@ public abstract class Aggregate<T extends AggregateState, EVENT_TYPE extends Eve
                 .apply(state, event);
     }
 
-    public List<Event> handle(T state, Command cmd){
+    public java.util.List<Event> handle(T state, Command cmd){
         return handlers
                 .get(cmd.getClass())
                 .getOrElseThrow(() -> new RuntimeException(format("No handler found for event %s", cmd.getClass().getSimpleName())))
-                .apply(state, cmd);
+                .apply(state, cmd).toJavaList();
     }
 }
