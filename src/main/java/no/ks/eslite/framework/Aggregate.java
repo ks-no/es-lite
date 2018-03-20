@@ -19,11 +19,6 @@ public abstract class Aggregate<T extends AggregateState, EVENT_TYPE extends Eve
         applicators = applicators.put(eventClass, (BiFunction<T, Event, T>) applicatorFunction);
     }
 
-    @SuppressWarnings("unchecked")
-    protected <C extends CMD_TYPE> void onCmd(Class<C> cmdClass, BiFunction<T, C, java.util.List<Event>> handlerFunction){
-        handlers = handlers.put(cmdClass, (BiFunction<T, Command, java.util.List<Event>>) handlerFunction);
-    }
-
     public abstract T initState();
 
     public T apply(T state, Event event){
@@ -33,10 +28,4 @@ public abstract class Aggregate<T extends AggregateState, EVENT_TYPE extends Eve
                 .apply(state, event);
     }
 
-    public java.util.List<Event> handle(T state, Command cmd){
-        return handlers
-                .get(cmd.getClass())
-                .getOrElseThrow(() -> new RuntimeException(format("No handler found for event %s", cmd.getClass().getSimpleName())))
-                .apply(state, cmd);
-    }
 }
