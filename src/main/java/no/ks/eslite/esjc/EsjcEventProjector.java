@@ -10,29 +10,34 @@ import lombok.extern.slf4j.Slf4j;
 import no.ks.eslite.framework.EventDeserializer;
 import no.ks.eslite.framework.Projection;
 
+import java.util.function.Consumer;
+
 @Slf4j
 public class EsjcEventProjector implements CatchUpSubscriptionListener{
 
     private final EventDeserializer deserializer;
     private final Set<Projection> projections;
+    private Consumer<Long> hwmUpdater;
 
-    public EsjcEventProjector(EventDeserializer deserializer, java.util.Set<Projection> projections) {
+    public EsjcEventProjector(EventDeserializer deserializer, java.util.Set<Projection> projections, Consumer<Long> hwmUpdater) {
         this.deserializer = deserializer;
         this.projections = HashSet.ofAll(projections);
+        this.hwmUpdater = hwmUpdater;
     }
 
     @Override
     public void onEvent(CatchUpSubscription catchUpSubscription, ResolvedEvent resolvedEvent) {
         log.info("Event {}@{}: {}({}) received", resolvedEvent.originalEventNumber(), resolvedEvent.originalStreamId(), resolvedEvent.event.eventType, resolvedEvent.event.eventId);
-        projections.forEach(p -> p.getProjectors()
-                .apply(resolvedEvent.event.eventType)
-                .accept(deserializer.deserialize(resolvedEvent.event.data, resolvedEvent.event.eventType)));
+        projections.flatMap(Projection::getProjectors)
+                .filter(p -> p._1.equals(resolvedEvent.event.eventType))
+                .map(p -> p._2)
+                .forEach( p -> p.accept(deserializer.deserialize(resolvedEvent.event.data, resolvedEvent.event.eventType)));
+        hwmUpdater.accept(resolvedEvent.originalEventNumber());
     }
 
     @Override
     public void onClose(CatchUpSubscription subscription, SubscriptionDropReason reason, Exception exception) {
         log.error("I'm dead", exception);
-
     }
 
     @Override

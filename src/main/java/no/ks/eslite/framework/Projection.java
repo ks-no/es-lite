@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 @Slf4j
 public abstract class Projection {
-    private static Map<String, Consumer<Event>> projectors = HashMap.empty();
+    private Map<String, Consumer<Event>> projectors = HashMap.empty();
 
     @SuppressWarnings("unchecked")
     protected  <T extends Event> void project(Class<T> eventClass, Consumer<T> consumer){
