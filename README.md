@@ -33,7 +33,6 @@ public class EventsourcingConfiguration {
 @Component
 public class ProjectionInitializer {
 
-
     private EsjcEventSubscriber subscriber;
     private EventDeserializer deserializer;
     private Set<Projection> projections;
