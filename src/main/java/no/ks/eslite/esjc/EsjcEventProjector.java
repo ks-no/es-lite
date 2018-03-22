@@ -8,12 +8,12 @@ import io.vavr.collection.Set;
 import no.ks.eslite.framework.EventDeserializer;
 import no.ks.eslite.framework.Projection;
 
-public class EsjcEventListener implements CatchUpSubscriptionListener{
+public class EsjcEventProjector implements CatchUpSubscriptionListener{
 
     private final EventDeserializer deserializer;
     private final Set<Projection> projections;
 
-    public EsjcEventListener(EventDeserializer deserializer, java.util.Set<Projection> projections) {
+    public EsjcEventProjector(EventDeserializer deserializer, java.util.Set<Projection> projections) {
         this.deserializer = deserializer;
         this.projections = HashSet.ofAll(projections);
     }
