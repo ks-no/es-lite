@@ -5,13 +5,6 @@ public class EventsourcingConfiguration {
 
     @Bean
     public EventStore eventStore(EvenStoreProperties conf) {
-   /*     return EventStoreBuilder.newBuilder()
-                .clusterNodeUsingGossipSeeds(cluster -> cluster
-                        .gossipSeedEndpoints(conf.getHosts().stream().map(p -> new InetSocketAddress(p, 1113)).collect(Collectors.toList())))
-                .useSslConnection()
-                .userCredentials(conf.getUser(), conf.getPassword())
-                .build();*/
-
         return EventStoreBuilder.newBuilder()
                 .singleNodeAddress(conf.getHosts().stream().findAny().get(), 1113)
                 .userCredentials(conf.getUser(), conf.getPassword())
