@@ -5,33 +5,64 @@ public class EventsourcingConfiguration {
 
     @Bean
     public EventStore eventStore(EvenStoreProperties conf) {
-        return EventStoreBuilder.newBuilder()
+   /*     return EventStoreBuilder.newBuilder()
                 .clusterNodeUsingGossipSeeds(cluster -> cluster
                         .gossipSeedEndpoints(conf.getHosts().stream().map(p -> new InetSocketAddress(p, 1113)).collect(Collectors.toList())))
                 .useSslConnection()
+                .userCredentials(conf.getUser(), conf.getPassword())
+                .build();*/
+
+        return EventStoreBuilder.newBuilder()
+                .singleNodeAddress(conf.getHosts().stream().findAny().get(), 1113)
                 .userCredentials(conf.getUser(), conf.getPassword())
                 .build();
     }
 
     @Bean
-    public EventDeserializer eventDeserializer(Set<Event> events){
-        return new JacksonEventDeserializer(events.stream().map(Event::getClass).collect(Collectors.toSet()));
+    public EventDeserializer eventDeserializer() {
+        return new JacksonEventDeserializer(List.ofAll(new Reflections("no.ks.fiks.autorisasjon").getSubTypesOf(Event.class))
+                .filter(p -> p.isAnnotationPresent(EventType.class))
+                .toJavaSet());
     }
 
     @Bean
-    public CmdHandler cmdHandler(EventStore eventStore, EventDeserializer deserializer){
-        EsjcStreamIdGenerator streamIdGenerator = (aggregateType, aggregateId) -> String.format("authorization_%s_%s", aggregateType, aggregateId);
+    public CmdHandler cmdHandler(EventStore eventStore, EventDeserializer deserializer) {
+        EsjcStreamIdGenerator streamIdGenerator = (aggregateType, aggregateId) -> String.format("no.ks.fiks.autorisasjon-%s-%s", aggregateType, aggregateId);
 
         return new CmdHandler(
                 new EsjcEventWriter(eventStore, streamIdGenerator),
                 new EsjcAggregateReader(eventStore, deserializer, streamIdGenerator));
     }
 
-    @Bean
-    public EsjcEventSubscriber esjcEventSubscriber(EventStore eventStore, EventDeserializer deserializer, Set<Projection> projections){
-        return new EsjcEventSubscriber(eventStore, 0L, new EsjcEventListener(deserializer, projections));
+}
+
+
+@Component
+public class ProjectionInitializer {
+
+
+    private EsjcEventSubscriber subscriber;
+    private EventDeserializer deserializer;
+    private Set<Projection> projections;
+    private HwmRepo hwmRepo;
+
+    @Autowired
+    public ProjectionInitializer(EventStore subscriber, EventDeserializer deserializer, Set<Projection> projections, HwmRepo hwmRepo) {
+        this.subscriber = new EsjcEventSubscriber(subscriber);
+        this.deserializer = deserializer;
+        this.projections = projections;
+        this.hwmRepo = hwmRepo;
     }
 
+    @EventListener({ApplicationReadyEvent.class})
+    void contextRefreshedEvent() {
+        subscriber.subscribeByCategory(
+                "no.ks.fiks.autorisasjon",
+                hwmRepo.get().orElse(null),
+                new EsjcEventProjector(deserializer, projections, (hwm) -> hwmRepo.update(hwm)));
+    }
 }
+
+
 
 ```
