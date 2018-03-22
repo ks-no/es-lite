@@ -1,9 +1,11 @@
 package no.ks.eslite.framework;
 
 
-import java.util.List;
+import io.vavr.collection.List;
+
+import java.util.UUID;
 
 public interface EventWriter {
 
-    void write(String aggregateType, Long expectedEventNumber, List<Event> events);
+    void write(String aggregateType, UUID aggregateId, Long expectedEventNumber, List<Event> events);
 }

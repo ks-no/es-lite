@@ -1,6 +1,7 @@
 package no.ks.eslite.esjc;
 
 import com.github.msemys.esjc.CatchUpSubscriptionListener;
+import com.github.msemys.esjc.CatchUpSubscriptionSettings;
 import com.github.msemys.esjc.EventStore;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,7 +15,7 @@ public class EsjcEventSubscriber {
     }
 
     public void subscribeByCategory(String category, Long hwm, CatchUpSubscriptionListener listener) {
-        eventStore.subscribeToStreamFrom("$ce-" + category, hwm, listener);
+        eventStore.subscribeToStreamFrom("$ce-" + category, hwm, CatchUpSubscriptionSettings.newBuilder().resolveLinkTos(true).build(), listener);
         log.info("Subscription initiated from event number {} on category projection {}", hwm, category);
     }
 }

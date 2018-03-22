@@ -1,5 +1,7 @@
 package no.ks.eslite.framework;
 
+import io.vavr.collection.List;
+
 public class CmdHandler {
 
     private final AggregateReader reader;
@@ -13,6 +15,6 @@ public class CmdHandler {
     @SuppressWarnings("unchecked")
     public void handle(Command cmd) {
         Aggregate aggregate = reader.read(cmd.getAggregateId(), cmd.getAggregate());
-        writer.write(aggregate.getAggregateType(), aggregate.getCurrentEventNumber(), cmd.execute(aggregate));
+        writer.write(aggregate.getAggregateType(), cmd.getAggregateId(), aggregate.getCurrentEventNumber(), List.ofAll(cmd.execute(aggregate)));
     }
 }
