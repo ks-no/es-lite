@@ -13,7 +13,7 @@ public class EventsourcingConfiguration {
 
     @Bean
     public EventDeserializer eventDeserializer() {
-        return new JacksonEventDeserializer(List.ofAll(new Reflections("no.ks.fiks.autorisasjon").getSubTypesOf(Event.class))
+        return new JacksonEventDeserializer(List.ofAll(new Reflections("no.ks.fiks").getSubTypesOf(Event.class))
                 .filter(p -> p.isAnnotationPresent(EventType.class))
                 .toJavaSet());
     }
@@ -49,7 +49,7 @@ public class ProjectionInitializer {
     @EventListener({ApplicationReadyEvent.class})
     void contextRefreshedEvent() {
         subscriber.subscribeByCategory(
-                "no.ks.fiks.autorisasjon",
+                "no.ks.fiks",
                 hwmRepo.get().orElse(null),
                 new EsjcEventProjector(deserializer, projections, (hwm) -> hwmRepo.update(hwm)));
     }
