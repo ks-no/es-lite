@@ -3,6 +3,7 @@ package no.ks.eslite.esjc;
 import com.github.msemys.esjc.CatchUpSubscription;
 import com.github.msemys.esjc.CatchUpSubscriptionListener;
 import com.github.msemys.esjc.ResolvedEvent;
+import com.github.msemys.esjc.SubscriptionDropReason;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -26,5 +27,16 @@ public class EsjcEventProjector implements CatchUpSubscriptionListener{
         projections.forEach(p -> p.getProjectors()
                 .apply(resolvedEvent.event.eventType)
                 .accept(deserializer.deserialize(resolvedEvent.event.data, resolvedEvent.event.eventType)));
+    }
+
+    @Override
+    public void onClose(CatchUpSubscription subscription, SubscriptionDropReason reason, Exception exception) {
+        log.error("I'm dead", exception);
+
+    }
+
+    @Override
+    public void onLiveProcessingStarted(CatchUpSubscription subscription) {
+        log.info("We're live!");
     }
 }

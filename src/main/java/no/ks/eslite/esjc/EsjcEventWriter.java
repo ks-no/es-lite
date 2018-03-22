@@ -7,6 +7,7 @@ import com.github.msemys.esjc.WriteResult;
 import io.vavr.collection.List;
 import lombok.extern.slf4j.Slf4j;
 import no.ks.eslite.framework.Event;
+import no.ks.eslite.framework.EventType;
 import no.ks.eslite.framework.EventWriter;
 
 import java.util.UUID;
@@ -34,13 +35,13 @@ public class EsjcEventWriter implements EventWriter {
                     expectedEventNumber,
                     events.map(aggEvent -> EventData.newBuilder()
                             .jsonData(unchecked(() -> objectMapper.writeValueAsBytes(aggEvent)).get())
-                            .type(aggEvent.getClass().getSimpleName())
+                            .type(aggEvent.getClass().getAnnotation(EventType.class).value())
                             .build())
                             .toJavaList())
                     .get();
             log.info("wrote {} events to stream {}, next expected version for this stream is {}", events.size(), stream, writeResult.nextExpectedVersion);
         } catch (Exception e) {
-            throw new RuntimeException("Error while appending events to stream " + stream);
+            throw new RuntimeException("Error while appending events to stream " + stream, e);
         }
     }
 
