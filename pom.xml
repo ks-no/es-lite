@@ -12,6 +12,12 @@
         <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>nexus</id>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>io.vavr</groupId>
