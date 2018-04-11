@@ -25,7 +25,7 @@ public class JacksonEventDeserializer implements EventDeserializer {
         this.objectMapper = objectMapper;
         this.events = HashSet.ofAll(events)
                 .peek(p -> {
-                    if (p.isAnnotationPresent(EventType.class))
+                    if (!p.isAnnotationPresent(EventType.class))
                         throw new RuntimeException(String.format("The event-class \"%s\" has not been annotated with the EventType annotation", p.getSimpleName()));
                 })
                 .toMap(API.unchecked(p -> Tuple.of(p.getAnnotation(EventType.class).value(), p)));
