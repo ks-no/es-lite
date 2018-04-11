@@ -10,17 +10,18 @@ import no.ks.eslite.framework.EventDeserializer;
 import no.ks.eslite.framework.EventType;
 
 import java.io.IOException;
+import java.util.Set;
 
 public class JacksonEventDeserializer implements EventDeserializer {
 
     private final ObjectMapper objectMapper;
     private final Map<String, Class<? extends Event>> events;
 
-    public JacksonEventDeserializer(java.util.Set<Class<? extends Event>> events) {
+    public JacksonEventDeserializer(Set<Class<? extends Event>> events) {
         this(new ObjectMapper(), events);
     }
 
-    public JacksonEventDeserializer(ObjectMapper objectMapper, java.util.Set<Class<? extends Event>> events) {
+    public JacksonEventDeserializer(ObjectMapper objectMapper, Set<Class<? extends Event>> events) {
         this.objectMapper = objectMapper;
         this.events = HashSet.ofAll(events)
                 .peek(p -> {
