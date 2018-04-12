@@ -10,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import no.ks.eslite.framework.EventDeserializer;
 import no.ks.eslite.framework.Projection;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Slf4j
 public class EsjcEventProjector implements CatchUpSubscriptionListener{
@@ -18,11 +20,13 @@ public class EsjcEventProjector implements CatchUpSubscriptionListener{
     private final EventDeserializer deserializer;
     private final Set<Projection> projections;
     private Consumer<Long> hwmUpdater;
+    private BiConsumer<SubscriptionDropReason, Exception> onClose;
 
-    public EsjcEventProjector(EventDeserializer deserializer, java.util.Set<Projection> projections, Consumer<Long> hwmUpdater) {
+    public EsjcEventProjector(EventDeserializer deserializer, java.util.Set<Projection> projections, Consumer<Long> hwmUpdater, BiConsumer<SubscriptionDropReason, Exception> onClose) {
         this.deserializer = deserializer;
         this.projections = HashSet.ofAll(projections);
         this.hwmUpdater = hwmUpdater;
+        this.onClose = onClose;
     }
 
     @Override
@@ -37,11 +41,16 @@ public class EsjcEventProjector implements CatchUpSubscriptionListener{
 
     @Override
     public void onClose(CatchUpSubscription subscription, SubscriptionDropReason reason, Exception exception) {
-        log.error("I'm dead", exception);
+        log.error("I'm dead: " + reason, exception);
+        onClose.accept(reason, exception);
     }
 
     @Override
     public void onLiveProcessingStarted(CatchUpSubscription subscription) {
         log.info("We're live!");
+        projections
+                .flatMap(Projection::getOnLive)
+                .forEach(Runnable::run);
     }
 }
+
