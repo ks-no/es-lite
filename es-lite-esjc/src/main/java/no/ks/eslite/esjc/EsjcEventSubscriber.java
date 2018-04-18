@@ -1,11 +1,9 @@
-package no.ks.eslite.esjc;
+package no.ks.eslite.akka;
 
 import com.github.msemys.esjc.CatchUpSubscriptionListener;
 import com.github.msemys.esjc.CatchUpSubscriptionSettings;
 import com.github.msemys.esjc.EventStore;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.function.Consumer;
 
 @Slf4j
 public class EsjcEventSubscriber {

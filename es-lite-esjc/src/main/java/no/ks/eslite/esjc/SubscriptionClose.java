@@ -1,7 +1,6 @@
-package no.ks.eslite.esjc;
+package no.ks.eslite.akka;
 
 
-import com.github.msemys.esjc.Subscription;
 import com.github.msemys.esjc.SubscriptionDropReason;
 import lombok.Builder;
 import lombok.Value;

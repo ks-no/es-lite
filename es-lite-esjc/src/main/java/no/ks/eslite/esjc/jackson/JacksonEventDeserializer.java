@@ -1,4 +1,4 @@
-package no.ks.eslite.jackson;
+package no.ks.eslite.esjc.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vavr.API;

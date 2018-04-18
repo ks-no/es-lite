@@ -1,4 +1,4 @@
-package no.ks.eslite.esjc;
+package no.ks.eslite.akka;
 
 import com.github.msemys.esjc.EventStore;
 import no.ks.eslite.framework.Aggregate;

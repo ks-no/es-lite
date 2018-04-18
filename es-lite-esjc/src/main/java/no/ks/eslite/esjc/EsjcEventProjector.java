@@ -1,4 +1,4 @@
-package no.ks.eslite.esjc;
+package no.ks.eslite.akka;
 
 import com.github.msemys.esjc.CatchUpSubscription;
 import com.github.msemys.esjc.CatchUpSubscriptionListener;
@@ -12,7 +12,6 @@ import no.ks.eslite.framework.Projection;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 @Slf4j
 public class EsjcEventProjector implements CatchUpSubscriptionListener{
