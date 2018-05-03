@@ -1,4 +1,4 @@
-package no.ks.eslite.akka;
+package no.ks.eslite.esjc;
 
 import java.util.UUID;
 

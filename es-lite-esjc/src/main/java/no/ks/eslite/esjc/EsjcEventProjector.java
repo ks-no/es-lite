@@ -1,4 +1,4 @@
-package no.ks.eslite.akka;
+package no.ks.eslite.esjc;
 
 import com.github.msemys.esjc.CatchUpSubscription;
 import com.github.msemys.esjc.CatchUpSubscriptionListener;

@@ -1,4 +1,4 @@
-package no.ks.eslite.akka;
+package no.ks.eslite.esjc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.msemys.esjc.EventData;
