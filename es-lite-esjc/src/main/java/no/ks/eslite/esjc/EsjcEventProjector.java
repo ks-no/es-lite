@@ -30,6 +30,10 @@ public class EsjcEventProjector implements CatchUpSubscriptionListener{
 
     @Override
     public void onEvent(CatchUpSubscription catchUpSubscription, ResolvedEvent resolvedEvent) {
+        if(!resolvedEvent.isResolved()){
+            log.info("Event not resolved {} {}", resolvedEvent.originalEventNumber(), resolvedEvent.originalStreamId());
+            return;
+        }
         log.info("Event {}@{}: {}({}) received", resolvedEvent.originalEventNumber(), resolvedEvent.originalStreamId(), resolvedEvent.event.eventType, resolvedEvent.event.eventId);
         projections.flatMap(Projection::getProjectors)
                 .filter(p -> p._1.equals(resolvedEvent.event.eventType))
