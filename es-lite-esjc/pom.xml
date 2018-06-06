@@ -7,17 +7,17 @@
     <parent>
         <groupId>no.ks</groupId>
         <artifactId>es-lite</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>es-lite-esjc</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
             <groupId>no.ks</groupId>
             <artifactId>es-lite-lib</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>no.ks</groupId>
