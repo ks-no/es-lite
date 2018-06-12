@@ -6,7 +6,7 @@
 
     <groupId>no.ks</groupId>
     <artifactId>es-lite</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
