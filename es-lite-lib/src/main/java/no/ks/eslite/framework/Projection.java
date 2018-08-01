@@ -5,7 +5,6 @@ import io.vavr.collection.Map;
 import io.vavr.control.Option;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -23,10 +22,17 @@ public abstract class Projection {
 
     @SuppressWarnings("unchecked")
     protected  <T extends Event> void project(Class<T> eventClass, Consumer<T> consumer){
-        projectors = projectors.put(eventClass.getAnnotation(EventType.class).value(), (e) -> {
-            log.info("Event {} on aggregate {} received by projection {}", e.getClass().getAnnotation(EventType.class), e.getAggregateId(), getClass().getSimpleName());
+        projectors = projectors.put(EventUtil.getEventType(eventClass), (e) -> {
+            log.info("Event {} on aggregate {} received by projection {}", EventUtil.getEventType(eventClass), e.getAggregateId(), getClass().getSimpleName());
             consumer.accept((T) e);
         });
+    }
+
+    public void accept(Event event){
+        projectors
+        .filter(p -> p._1.equals(EventUtil.getEventType(event.getClass())))
+                .map(p -> p._2)
+                .forEach( p -> p.accept(event));
     }
 
     protected void onLive(Runnable onLive){

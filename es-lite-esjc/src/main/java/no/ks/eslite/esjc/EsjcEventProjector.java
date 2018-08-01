@@ -35,10 +35,7 @@ public class EsjcEventProjector implements CatchUpSubscriptionListener{
             return;
         }
         log.info("Event {}@{}: {}({}) received", resolvedEvent.originalEventNumber(), resolvedEvent.originalStreamId(), resolvedEvent.event.eventType, resolvedEvent.event.eventId);
-        projections.flatMap(Projection::getProjectors)
-                .filter(p -> p._1.equals(resolvedEvent.event.eventType))
-                .map(p -> p._2)
-                .forEach( p -> p.accept(deserializer.deserialize(resolvedEvent.event.data, resolvedEvent.event.eventType)));
+        projections.forEach(p -> p.accept(deserializer.deserialize(resolvedEvent.event.data, resolvedEvent.event.eventType)));
         hwmUpdater.accept(resolvedEvent.originalEventNumber());
     }
 

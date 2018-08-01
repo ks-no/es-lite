@@ -8,8 +8,10 @@ import io.vavr.collection.List;
 import lombok.extern.slf4j.Slf4j;
 import no.ks.eslite.framework.Event;
 import no.ks.eslite.framework.EventType;
+import no.ks.eslite.framework.EventUtil;
 import no.ks.eslite.framework.EventWriter;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static io.vavr.API.unchecked;
@@ -35,7 +37,7 @@ public class EsjcEventWriter implements EventWriter {
                     expectedEventNumber,
                     events.map(aggEvent -> EventData.newBuilder()
                             .jsonData(unchecked(() -> objectMapper.writeValueAsBytes(aggEvent)).get())
-                            .type(aggEvent.getClass().getAnnotation(EventType.class).value())
+                            .type(EventUtil.getEventType(aggEvent.getClass()))
                             .build())
                             .toJavaList())
                     .get();
