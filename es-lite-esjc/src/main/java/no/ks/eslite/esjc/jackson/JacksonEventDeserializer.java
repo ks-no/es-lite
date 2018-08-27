@@ -34,9 +34,17 @@ public class JacksonEventDeserializer implements EventDeserializer {
     @Override
     public Event deserialize(byte[] eventData, String eventType) {
         try {
-            return objectMapper.readValue(
+            Event event = objectMapper.readValue(
                     eventData,
                     events.get(eventType).getOrElseThrow(() -> new RuntimeException("No class registered for event type " + eventType)));
+
+            Event upgraded = event.upgrade();
+            while (upgraded != null) {
+                event = upgraded;
+                upgraded = event.upgrade();
+            }
+
+            return event;
         } catch (IOException e) {
             throw new RuntimeException("Error during deserialization of eventType " + eventType, e);
         }
