@@ -31,7 +31,11 @@ public class EsjcEventProjector implements CatchUpSubscriptionListener{
     @Override
     public void onEvent(CatchUpSubscription catchUpSubscription, ResolvedEvent resolvedEvent) {
         if(!resolvedEvent.isResolved()){
-            log.info("Event not resolved {} {}", resolvedEvent.originalEventNumber(), resolvedEvent.originalStreamId());
+            log.info("Event not resolved: {} {}", resolvedEvent.originalEventNumber(), resolvedEvent.originalStreamId());
+            return;
+        }
+        if (EsjcEventUtil.isIgnorableEvent(resolvedEvent)) {
+            log.info("Event ignored: {} {}", resolvedEvent.originalEventNumber(), resolvedEvent.originalStreamId());
             return;
         }
         log.info("Event {}@{}: {}({}) received", resolvedEvent.originalEventNumber(), resolvedEvent.originalStreamId(), resolvedEvent.event.eventType, resolvedEvent.event.eventId);

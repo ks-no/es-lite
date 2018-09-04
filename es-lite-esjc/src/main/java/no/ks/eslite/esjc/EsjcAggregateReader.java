@@ -27,7 +27,8 @@ public class EsjcAggregateReader implements AggregateReader {
         try {
             mutatedaggregate.add(0, aggregate);
             eventStore.streamEventsForward(this.esjcStreamIdGenerator.generateStreamId(aggregate.getAggregateType(), aggregateId), 0, 100, true)
-                    .forEach(p -> mutatedaggregate.add(0,mutatedaggregate.get(0).apply(mutatedaggregate.get(0), deserializer.deserialize(p.event.data, p.event.eventType), p.event.eventNumber)));
+                    .filter(e -> !EsjcEventUtil.isIgnorableEvent(e))
+                    .forEach(e -> mutatedaggregate.add(0,mutatedaggregate.get(0).apply(mutatedaggregate.get(0), deserializer.deserialize(e.event.data, e.event.eventType), e.event.eventNumber)));
         } catch(IllegalStateException e){
             if("Unexpected read status: StreamNotFound".equals(e.getMessage())){
                 return aggregate.withCurrentEventNumber(-1);
