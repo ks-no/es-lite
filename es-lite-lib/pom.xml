@@ -7,11 +7,11 @@
     <parent>
         <groupId>no.ks</groupId>
         <artifactId>es-lite</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
     </parent>
 
     <artifactId>es-lite-lib</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
 
     <build>
         <plugins>
