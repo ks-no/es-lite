@@ -3,6 +3,7 @@ package no.ks.eslite.esjc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.msemys.esjc.EventData;
 import com.github.msemys.esjc.EventStore;
+import com.github.msemys.esjc.ExpectedVersion;
 import com.github.msemys.esjc.WriteResult;
 import io.vavr.collection.List;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +30,12 @@ public class EsjcEventWriter implements EventWriter {
     }
 
     @Override
-    public void write(String aggregateType, UUID aggregateId, Long expectedEventNumber, List<Event> events) {
+    public void write(String aggregateType, UUID aggregateId, Long expectedEventNumber, List<Event> events, boolean useOptimisticLocking) {
         String stream = streamIdGenerator.generateStreamId(aggregateType, aggregateId);
         try {
             WriteResult writeResult = eventStore.appendToStream(
                     stream,
-                    expectedEventNumber,
+                    useOptimisticLocking ? expectedEventNumber : ExpectedVersion.ANY,
                     events.map(aggEvent -> EventData.newBuilder()
                             .jsonData(unchecked(() -> objectMapper.writeValueAsBytes(aggEvent)).get())
                             .type(EventUtil.getEventType(aggEvent.getClass()))

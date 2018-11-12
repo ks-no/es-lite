@@ -15,6 +15,6 @@ public class CmdHandler {
     @SuppressWarnings("unchecked")
     public void handle(Command cmd) {
         Aggregate aggregate = reader.read(cmd.getAggregateId(), cmd.getAggregate());
-        writer.write(aggregate.getAggregateType(), cmd.getAggregateId(), aggregate.getCurrentEventNumber(), List.ofAll(cmd.execute(aggregate)));
+        writer.write(aggregate.getAggregateType(), cmd.getAggregateId(), aggregate.getCurrentEventNumber(), List.ofAll(cmd.execute(aggregate)), cmd.useOptimisticLocking());
     }
 }
