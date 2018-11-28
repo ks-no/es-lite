@@ -8,6 +8,7 @@ import io.vavr.collection.HashSet;
 import io.vavr.collection.Set;
 import lombok.extern.slf4j.Slf4j;
 import no.ks.eslite.framework.EventDeserializer;
+import no.ks.eslite.framework.EventWrapper;
 import no.ks.eslite.framework.Projection;
 
 import java.util.function.BiConsumer;
@@ -39,7 +40,10 @@ public class EsjcEventProjector implements CatchUpSubscriptionListener{
             return;
         }
         log.info("Event {}@{}: {}({}) received", resolvedEvent.originalEventNumber(), resolvedEvent.originalStreamId(), resolvedEvent.event.eventType, resolvedEvent.event.eventId);
-        projections.forEach(p -> p.accept(deserializer.deserialize(resolvedEvent.event.data, resolvedEvent.event.eventType)));
+        projections.forEach(p -> p.accept(EventWrapper.builder()
+                .event(deserializer.deserialize(resolvedEvent.event.data, resolvedEvent.event.eventType))
+                .eventNumber(resolvedEvent.originalEventNumber())
+                .build()));
         hwmUpdater.accept(resolvedEvent.originalEventNumber());
     }
 
