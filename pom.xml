@@ -30,7 +30,7 @@
     </distributionManagement>
 
     <properties>
-        <jackson.version>2.9.7</jackson.version>
+        <jackson.version>2.9.8</jackson.version>
     </properties>
 
     <dependencyManagement>
