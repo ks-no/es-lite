@@ -12,6 +12,7 @@
     <modules>
         <module>es-lite-esjc</module>
         <module>es-lite-lib</module>
+        <module>es-lite-test</module>
     </modules>
 
     <distributionManagement>
