@@ -65,7 +65,8 @@ public class ValidationProjection extends Projection {
 
     public void assertNoRemainingExpectedEvents() {
         if (!expectedEvents.isEmpty()) {
-            throw new RuntimeException(String.format("Has remaining events %s.", expectedEvents));
+            Set<String> events = expectedEvents.stream().map(Expected::getEventClass).map(Class::getName).collect(Collectors.toSet());
+            throw new RuntimeException(String.format("Has remaining expected events %s.", events));
         }
     }
 
