@@ -20,18 +20,27 @@
             <uniqueVersion>false</uniqueVersion>
             <id>ks-nexus</id>
             <name>KS Repository</name>
-            <url>http://ksjenkins1-u.usrv.ubergenkom.no:8082/repository/ks-nexus/</url>
+            <url>https://artifactory.fiks.ks.no/artifactory/ks-maven</url>
         </repository>
         <snapshotRepository>
             <uniqueVersion>true</uniqueVersion>
             <id>ks-nexus-snapshot</id>
             <name>KS Snapshots</name>
-            <url>http://ksjenkins1-u.usrv.ubergenkom.no:8082/repository/ks-nexus-snapshot/</url>
+            <url>https://artifactory.fiks.ks.no/artifactory/ks-maven-snapshot</url>
         </snapshotRepository>
     </distributionManagement>
 
     <properties>
-        <jackson.version>2.9.8</jackson.version>
+        <jackson.version>2.9.9</jackson.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <vavr.version>0.9.2</vavr.version>
+        <lombok.version>1.16.18</lombok.version>
+        <esjc-shaded.version>2.0.0</esjc-shaded.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
+        <maven-versions-plugin.version>2.7</maven-versions-plugin.version>
+        <scijava-maven-plugin.version>1.1.</scijava-maven-plugin.version>
+        <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -44,7 +53,7 @@
         <dependency>
             <groupId>no.ks</groupId>
             <artifactId>esjc-shaded</artifactId>
-            <version>2.0.0</version>
+            <version>${esjc-shaded.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -63,18 +72,18 @@
         <dependency>
             <groupId>io.vavr</groupId>
             <artifactId>vavr</artifactId>
-            <version>0.9.2</version>
+            <version>${vavr.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.18</version>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
-            <version>1.7.25</version>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 
@@ -83,7 +92,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0-M1</version>
+                <version>${maven-enforcer-plugin.version}</version>
                 <inherited>true</inherited>
                 <executions>
                     <execution>
@@ -113,7 +122,7 @@
                     <dependency>
                         <groupId>org.scijava</groupId>
                         <artifactId>scijava-maven-plugin</artifactId>
-                        <version>1.0.0</version>
+                        <version>${scijava-maven-plugin.version}0</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -123,12 +132,12 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>versions-maven-plugin</artifactId>
-                    <version>2.5</version>
+                    <version>${maven-versions-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>${maven-source-plugin.version}</version>
                     <executions>
                         <execution>
                             <id>attach-sources</id>
@@ -141,7 +150,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.7.0</version>
+                    <version>${maven-compiler-plugin.version}</version>
                     <configuration>
                         <source>1.8</source>
                         <target>1.8</target>
