@@ -1,6 +1,5 @@
 package no.ks.eslite.esjc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.msemys.esjc.EventData;
 import com.github.msemys.esjc.EventStore;
 import com.github.msemys.esjc.ExpectedVersion;
@@ -8,25 +7,23 @@ import com.github.msemys.esjc.WriteResult;
 import io.vavr.collection.List;
 import lombok.extern.slf4j.Slf4j;
 import no.ks.eslite.framework.Event;
-import no.ks.eslite.framework.EventType;
+import no.ks.eslite.framework.EventSerdes;
 import no.ks.eslite.framework.EventUtil;
 import no.ks.eslite.framework.EventWriter;
 
-import java.util.Optional;
 import java.util.UUID;
-
-import static io.vavr.API.unchecked;
 
 @Slf4j
 public class EsjcEventWriter implements EventWriter {
 
     private final EventStore eventStore;
     private EsjcStreamIdGenerator streamIdGenerator;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private EventSerdes deserializer;
 
-    public EsjcEventWriter(EventStore eventStore, EsjcStreamIdGenerator streamIdGenerator) {
+    public EsjcEventWriter(EventStore eventStore, EsjcStreamIdGenerator streamIdGenerator, EventSerdes deserializer) {
         this.eventStore = eventStore;
         this.streamIdGenerator = streamIdGenerator;
+        this.deserializer = deserializer;
     }
 
     @Override
@@ -37,7 +34,7 @@ public class EsjcEventWriter implements EventWriter {
                     stream,
                     useOptimisticLocking ? expectedEventNumber : ExpectedVersion.ANY,
                     events.map(aggEvent -> EventData.newBuilder()
-                            .jsonData(unchecked(() -> objectMapper.writeValueAsBytes(aggEvent)).get())
+                            .jsonData(deserializer.serialize(aggEvent))
                             .type(EventUtil.getEventType(aggEvent.getClass()))
                             .build())
                             .toJavaList())

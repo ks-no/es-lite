@@ -3,7 +3,7 @@ package no.ks.eslite.esjc;
 import com.github.msemys.esjc.EventStore;
 import no.ks.eslite.framework.Aggregate;
 import no.ks.eslite.framework.AggregateReader;
-import no.ks.eslite.framework.EventDeserializer;
+import no.ks.eslite.framework.EventSerdes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +12,10 @@ import java.util.UUID;
 public class EsjcAggregateReader implements AggregateReader {
 
     private final EventStore eventStore;
-    private EventDeserializer deserializer;
+    private EventSerdes deserializer;
     private EsjcStreamIdGenerator esjcStreamIdGenerator;
 
-    public EsjcAggregateReader(EventStore eventStore, EventDeserializer deserializer, EsjcStreamIdGenerator esjcStreamIdGenerator) {
+    public EsjcAggregateReader(EventStore eventStore, EventSerdes deserializer, EsjcStreamIdGenerator esjcStreamIdGenerator) {
         this.eventStore = eventStore;
         this.deserializer = deserializer;
         this.esjcStreamIdGenerator = esjcStreamIdGenerator;

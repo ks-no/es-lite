@@ -15,7 +15,7 @@ public abstract class Aggregate<AGGREGATE extends Aggregate, EVENT_TYPE extends 
     protected <E extends EVENT_TYPE> void onEvent(Class<E> eventClass, BiFunction<AGGREGATE, E, AGGREGATE> applicatorFunction) {
         applicators = applicators.put(
                 EventUtil.getEventType(eventClass),
-                (a, e) -> applicatorFunction.apply((AGGREGATE) a, EventUtil.upgradeTo(e, eventClass))
+                (a, e) -> applicatorFunction.apply((AGGREGATE) a, EventUpgrader.upgradeTo(e, eventClass))
         );
     }
 
@@ -31,10 +31,10 @@ public abstract class Aggregate<AGGREGATE extends Aggregate, EVENT_TYPE extends 
         return (AGGREGATE) this;
     }
 
-    public Aggregate apply(@NonNull final Aggregate aggregate, @NonNull final Event event, final long eventNumber) {
+    public Aggregate apply(@NonNull final Aggregate currentState, @NonNull final Event event, final long eventNumber) {
         return applicators.get(EventUtil.getEventType(event.getClass()))
-                .map(p -> p.apply(aggregate, event))
-                .getOrElse(aggregate)
+                .map(p -> p.apply(currentState, event))
+                .getOrElse(currentState)
                 .withCurrentEventNumber(eventNumber);
     }
 

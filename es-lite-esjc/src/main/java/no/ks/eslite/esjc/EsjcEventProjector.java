@@ -7,7 +7,7 @@ import com.github.msemys.esjc.SubscriptionDropReason;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.Set;
 import lombok.extern.slf4j.Slf4j;
-import no.ks.eslite.framework.EventDeserializer;
+import no.ks.eslite.framework.EventSerdes;
 import no.ks.eslite.framework.EventWrapper;
 import no.ks.eslite.framework.Projection;
 
@@ -17,12 +17,12 @@ import java.util.function.Consumer;
 @Slf4j
 public class EsjcEventProjector implements CatchUpSubscriptionListener{
 
-    private final EventDeserializer deserializer;
+    private final EventSerdes deserializer;
     private final Set<Projection> projections;
     private Consumer<Long> hwmUpdater;
     private BiConsumer<SubscriptionDropReason, Exception> onClose;
 
-    public EsjcEventProjector(EventDeserializer deserializer, java.util.Set<Projection> projections, Consumer<Long> hwmUpdater, BiConsumer<SubscriptionDropReason, Exception> onClose) {
+    public EsjcEventProjector(EventSerdes deserializer, java.util.Set<Projection> projections, Consumer<Long> hwmUpdater, BiConsumer<SubscriptionDropReason, Exception> onClose) {
         this.deserializer = deserializer;
         this.projections = HashSet.ofAll(projections);
         this.hwmUpdater = hwmUpdater;
