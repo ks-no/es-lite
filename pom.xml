@@ -31,7 +31,7 @@
     </distributionManagement>
 
     <properties>
-        <jackson.version>2.10.0.pr1</jackson.version>
+        <jackson.version>2.10.0.pr3</jackson.version>
         <slf4j.version>1.7.26</slf4j.version>
         <vavr.version>0.10.2</vavr.version>
         <lombok.version>1.16.18</lombok.version>
