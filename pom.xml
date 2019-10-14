@@ -93,8 +93,8 @@
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.28</version>
         </dependency>
     </dependencies>
 
@@ -113,7 +113,6 @@
                                 <requireReleaseVersion/>
                                 <requireReproducibleBuilds
                                         implementation="org.scijava.maven.plugin.enforcer.RequireReproducibleBuilds">
-
                                 </requireReproducibleBuilds>
                             </rules>
                         </configuration>
