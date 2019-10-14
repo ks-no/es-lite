@@ -18,8 +18,8 @@
             <artifactId>es-lite-lib</artifactId>
         </dependency>
         <dependency>
-            <groupId>no.ks</groupId>
-            <artifactId>esjc-shaded</artifactId>
+            <groupId>com.github.msemys</groupId>
+            <artifactId>esjc</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
