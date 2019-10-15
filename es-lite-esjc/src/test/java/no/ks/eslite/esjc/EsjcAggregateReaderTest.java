@@ -59,7 +59,7 @@ class EsjcAggregateReaderTest {
 
     @Test
     @DisplayName("Test that the reader returns an empty aggregate if no stream is found")
-    void testReadEmptyAggregate() throws UnsupportedEncodingException {
+    void testReadEmptyAggregate() {
         JacksonEventSerdes eventSerdes = new JacksonEventSerdes(singleton(HiredEvent.class));
 
         EventStore eventStoreMock = mock(EventStore.class);
