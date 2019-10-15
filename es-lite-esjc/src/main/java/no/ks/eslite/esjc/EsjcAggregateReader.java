@@ -1,6 +1,7 @@
 package no.ks.eslite.esjc;
 
 import com.github.msemys.esjc.EventStore;
+import com.github.msemys.esjc.operation.StreamNotFoundException;
 import no.ks.eslite.framework.Aggregate;
 import no.ks.eslite.framework.AggregateReader;
 import no.ks.eslite.framework.EventSerdes;
@@ -22,18 +23,15 @@ public class EsjcAggregateReader implements AggregateReader {
     }
 
     @Override
-    public Aggregate read(UUID aggregateId,final Aggregate aggregate) {
-        final List<Aggregate> mutatedaggregate= new ArrayList<>(1);
+    public Aggregate read(UUID aggregateId, final Aggregate aggregate) {
+        final List<Aggregate> mutatedaggregate = new ArrayList<>(1);
         try {
             mutatedaggregate.add(0, aggregate);
             eventStore.streamEventsForward(this.esjcStreamIdGenerator.generateStreamId(aggregate.getAggregateType(), aggregateId), 0, 100, true)
                     .filter(e -> !EsjcEventUtil.isIgnorableEvent(e))
-                    .forEach(e -> mutatedaggregate.add(0,mutatedaggregate.get(0).apply(mutatedaggregate.get(0), deserializer.deserialize(e.event.data, e.event.eventType), e.event.eventNumber)));
-        } catch(IllegalStateException e){
-            if("Unexpected read status: StreamNotFound".equals(e.getMessage())){
-                return aggregate.withCurrentEventNumber(-1);
-            }
-            throw e;
+                    .forEach(e -> mutatedaggregate.add(0, mutatedaggregate.get(0).apply(mutatedaggregate.get(0), deserializer.deserialize(e.event.data, e.event.eventType), e.event.eventNumber)));
+        } catch (StreamNotFoundException e) {
+            return aggregate.withCurrentEventNumber(-1);
         }
         return mutatedaggregate.get(0);
     }
