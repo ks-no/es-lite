@@ -31,9 +31,10 @@
     </distributionManagement>
 
     <properties>
-        <jackson.version>2.10.0.pr1</jackson.version>
-        <slf4j.version>1.7.26</slf4j.version>
-        <vavr.version>0.10.2</vavr.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jackson.version>2.11.3</jackson.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <vavr.version>0.10.3</vavr.version>
         <lombok.version>1.18.10</lombok.version>
         <esjc-shaded.version>2.0.0</esjc-shaded.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -42,6 +43,9 @@
         <scijava-maven-plugin.version>1.1.</scijava-maven-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
         <esjc.version>2.1.0</esjc.version>
+        <logback.version>1.2.3</logback.version>
+        <junit.version>5.7.0</junit.version>
+        <mockito.version>3.5.13</mockito.version>
     </properties>
 
     <dependencyManagement>
@@ -57,24 +61,30 @@
                 <version>${esjc.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
                 <version>${jackson.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
-                <artifactId>jackson-datatype-jdk8</artifactId>
-                <version>${jackson.version}</version>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
-                <artifactId>jackson-datatype-jsr310</artifactId>
-                <version>${jackson.version}</version>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -94,7 +104,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.28</version>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 

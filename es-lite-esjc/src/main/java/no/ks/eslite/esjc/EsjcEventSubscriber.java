@@ -14,8 +14,9 @@ public class EsjcEventSubscriber {
         this.eventStore = eventStore;
     }
 
-    public void subscribeByCategory(String category, Long hwm, CatchUpSubscriptionListener listener) {
-        eventStore.subscribeToStreamFrom("$ce-" + category, hwm, CatchUpSubscriptionSettings.newBuilder().resolveLinkTos(true).build(), listener);
+    public EsjcSubscription subscribeByCategory(String category, Long hwm, CatchUpSubscriptionListener listener) {
+        var subscription = eventStore.subscribeToStreamFrom("$ce-" + category, hwm, CatchUpSubscriptionSettings.newBuilder().resolveLinkTos(true).build(), listener);
         log.info("Subscription initiated from event number {} on category projection {}", hwm, category);
+        return new CatchUpEsjcSubscriptionWrapper(subscription);
     }
 }
