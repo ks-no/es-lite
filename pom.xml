@@ -33,7 +33,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jackson.version>2.11.3</jackson.version>
-        <slf4j.version>1.7.30</slf4j.version>
+        <slf4j.version>1.7.32</slf4j.version>
         <vavr.version>0.10.3</vavr.version>
         <lombok.version>1.18.16</lombok.version>
         <esjc-shaded.version>2.0.0</esjc-shaded.version>
