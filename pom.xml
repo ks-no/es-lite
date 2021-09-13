@@ -44,7 +44,7 @@
         <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
         <esjc.version>2.3.0</esjc.version>
         <logback.version>1.2.3</logback.version>
-        <junit.version>5.7.0</junit.version>
+        <junit.version>5.8.0</junit.version>
         <mockito.version>3.5.15</mockito.version>
     </properties>
 
