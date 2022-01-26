@@ -35,7 +35,7 @@
         <jackson.version>2.13.1</jackson.version>
         <slf4j.version>1.7.35</slf4j.version>
         <vavr.version>0.10.3</vavr.version>
-        <lombok.version>1.18.16</lombok.version>
+        <lombok.version>1.18.22</lombok.version>
         <esjc-shaded.version>2.0.0</esjc-shaded.version>
         <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
